@@ -17,32 +17,36 @@ class Restaurante:
         # Definir como esse objeto será exibido em texto (por exemplo, em print()s)
         # para dar print nos atributos de um objeto cuja classe nao tem um __str__, se usa vars(OBJETO)
         # print (vars(restaurante_praca))
-        return '{} {} {:.1f} {} | {}'.format(self._nome.ljust(25), self._categoria.ljust(25), self.media_avaliacoes,''.ljust(25),self.ativo)
+        return '{} {} {} | {}'.format(self._nome.ljust(25), self._categoria.ljust(25), self.media_avaliacoes.ljust(25),self.ativo)
     
+
     @property # muda como esses atributos serão lidos
     def ativo(self): # define como 'ativo' deve ser lido
         return '☑' if self._ativo else '☒'
     
     @property
     def media_avaliacoes(self):
+        '''Retorna uma string da média das notas.'''
         if not self._avaliacoes:
-            return 0
+            return 'NENHUMA AVALIAÇÃO'
         else:
             media = sum(a._nota for a in self._avaliacoes) / len(self._avaliacoes)
-            return media
-        
+            return '{:.1f}'.format(media)
+    
+
     @classmethod # É um método da classe, não de um objeto específico
     def listar_restaurantes(cls):
-        print('{} {} {} {}| {}'.format('Restaurante'.ljust(25), 'Categoria'.ljust(25), 'Nota',''.ljust(25),'Status').upper())
+        print('{} {} {} | {}'.format('Restaurante'.ljust(25), 'Categoria'.ljust(25), 'Nota (0 - 5)'.ljust(25), 'Status').upper())
         for r in cls.restaurantes:
             print(r)
-        
     
+
     def alternar_estado(self):
         self._ativo = not self._ativo
     
     def receber_avaliacao(self, cliente, nota):
-        avaliacao = Avaliacao(cliente, nota)
-        self._avaliacoes.append(avaliacao)
+        if 0 <= nota <=5:
+            avaliacao = Avaliacao(cliente, nota)
+            self._avaliacoes.append(avaliacao)
     
     
